@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 })
 
 // To Add New Pangolins
-router.route('/addpangolin').post(function (req, res) {
+router.post('/addpangolin',  (req, res) => {
  let pangolin = new pangolinsModel(req.body);
  pangolin.save()
  .then(game => {
@@ -33,7 +33,7 @@ router.route('/addpangolin').post(function (req, res) {
 
 
 
-router.get('/editpangolin/:id', async (req, res) => {
+router.get('information/:id', async (req, res) => {
     let id = req.params.id;
     try{
         const pangolin = await pangolinsModel.findById(id);
@@ -42,6 +42,20 @@ router.get('/editpangolin/:id', async (req, res) => {
     }catch(err){
         res.status(500).json(err);
     }
+})
+
+
+
+
+router.get('/editpangolin/:id', async (req, res) => {
+  let id = req.params.id;
+  try{
+      const pangolin = await pangolinsModel.findById(id);
+      res.status(200).json(pangolin);
+
+  }catch(err){
+      res.status(500).json(err);
+  }
 })
 
 router.put('/updatepangolin/:id', async (req, res) => {

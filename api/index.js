@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const pangolinsRoute = require('./routes/pangolins')
 const authRoute = require('./routes/auth')
+const FriendRoute = require('./routes/friend')
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ dotenv.config();
 app.use(express.json());
 app.use('/pangolins', pangolinsRoute);
 app.use('/auth', authRoute);
+app.use('/friend', FriendRoute);
 
   
 

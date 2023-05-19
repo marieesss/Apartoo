@@ -1,0 +1,26 @@
+<a routerLink="/inscription">Ajouter un pangolin</a>
+<a routerLink="/list-pangolin">Les pangolins</a>
+<a routerLink="/logout">Logout</a>
+
+<h3>Mon pangolin</h3>
+  <p>nom {{ user.username }}</p>
+  <p>email {{ user.email }}</p>
+  <p>role {{ user.role }}</p>
+
+  <h3> Modifier mon rôle </h3>
+  <form [formGroup]="frmGroup" (ngSubmit)="Modifier()">
+
+  
+    <label for="role">Modifier mon rôle:</label>
+    <select id="role" formControlName="role">
+      <option value="" disabled selected>Choisissez un rôle</option>
+      <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+    </select>
+  
+  
+    <button type="submit" class="btn btn-primary">Changer le rôle</button>
+
+    <h3> Mes amis</h3>
+  
+  </form>
+

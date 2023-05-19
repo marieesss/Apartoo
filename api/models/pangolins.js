@@ -5,10 +5,8 @@ let Pangolins = new Schema({
  username: {type: String, required: true, unique:true},
  email: {type: String, required: true, unique:true},
  password: {type: String, required:true},
- rôle: {type: String, required:true},
- amis: [
-    { pangolinId : {type: String}}
- ],
+ role: {type: String, required:true},
+ amis: [],
 },
 {timestamps: true});
 
