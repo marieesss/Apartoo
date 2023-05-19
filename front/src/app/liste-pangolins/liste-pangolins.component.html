@@ -1,0 +1,13 @@
+<a routerLink="/inscription">Ajouter un pangolin</a>
+<a routerLink="/profil">Mon profil</a>
+
+
+<div *ngIf="Pangolins">
+<div *ngFor="let pangolin of Pangolins">
+    <h2>{{ pangolin.username }}</h2>
+    <p>role: {{ pangolin.role }}</p>
+    <p>mail: {{ pangolin.email}}</p>
+    <button mat-button color="primary" (click)="addFriend(pangolin._id)">Edit</button>
+  </div>
+  
+</div>
