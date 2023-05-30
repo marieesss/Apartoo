@@ -1,5 +1,7 @@
 // Importing important packages
 const express = require('express');
+const mongoose = require('mongoose');
+
 
 // Using express and routes
 const app = express();
@@ -23,7 +25,7 @@ router.get("/", async (req, res) => {
 router.post('/addpangolin',  (req, res) => {
  let pangolin = new pangolinsModel(req.body);
  pangolin.save()
- .then(game => {
+ .then(res => {
  res.status(200).json({ 'pangolin': 'pangolin Added Successfully' });
  })
  .catch(err => {
@@ -33,16 +35,45 @@ router.post('/addpangolin',  (req, res) => {
 
 
 
-router.get('information/:id', async (req, res) => {
-    let id = req.params.id;
-    try{
-        const pangolin = await pangolinsModel.findById(id);
-        res.status(200).json(pangolin);
-
-    }catch(err){
-        res.status(500).json(err);
+router.get('/information/:id', async (req, res) => {
+  const pangolinId = req.params.id;
+  
+  try {
+    const pangolin = await pangolinsModel.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(pangolinId) }
+      },
+      {
+        $addFields: {
+          amis: {
+            $map: {
+              input: "$amis",
+              in: { $toObjectId: "$$this" } // Conversion de chaque ID en ObjectId
+            }
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'pangolins',
+          localField: 'amis',
+          foreignField: '_id',
+          as: 'friends'
+        }
+      }
+    ]).exec();
+    if (pangolin.length === 0) {
+      return res.status(404).json({ error: 'Pangolin not found' });
     }
-})
+
+    res.status(200).json(pangolin[0]);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err)
+  }
+});
+
+
 
 
 
@@ -79,7 +110,14 @@ router.put('/updatepangolin/:id', async (req, res) => {
 router.delete('/deletepangolin/:id', async (req, res) => {
     try {
       await pangolinsModel.findByIdAndDelete(req.params.id);
-      res.status(200).json("Order has been deleted...");
+
+      await pangolinsModel.updateMany(
+        { amis: req.params.id },
+        { $pull: { amis: req.params.id } }
+      );
+
+
+      res.status(200).json("Pangolins has been deleted...");
     } catch (err) {
       res.status(500).json(err);
     }

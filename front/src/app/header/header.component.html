@@ -1,0 +1,11 @@
+<div *ngIf="user">
+<a routerLink="/list-pangolin">liste des pangolins</a>
+<a routerLink="/profil">Mon profil</a>
+<a routerLink="/logout">Logout</a>
+</div>
+
+<div *ngIf="!user">
+    <a routerLink="/inscription">Ajouter un pangolin</a>
+    <a routerLink="/connexion">Connexion</a>
+
+    </div>

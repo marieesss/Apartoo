@@ -37,4 +37,12 @@ export class DataService {
   getPangolins() {
     return this.http.get(`${this.uri}`);
     }
+
+  DeleteFriend(personId:string, friendId: string){
+    return this.http.delete(`${this.urifriend}/persons/${personId}/friends/${friendId}`);
+  }
+
+    getPangolinsInfo(personId:string) {
+      return this.http.get(`${this.uri}/information/${personId}`);
+      }
 }
