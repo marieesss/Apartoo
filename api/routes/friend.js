@@ -31,22 +31,24 @@ router.put('/:personId/friends/:friendId', async (req, res) => {
   });
   
   
-  router.delete('/api/persons/:personId/friends/:friendId', (req, res) => {
+  router.delete('/persons/:personId/friends/:friendId', async (req, res) => {
     const personId = req.params.personId;
     const friendId = req.params.friendId;
   
     // Retrieve the person from the database using personId
-    const person = getPersonById(personId);
+    const person = await pangolinsModel.findById(personId)
   
     if (!person) {
       return res.status(404).json({ error: 'Person not found' });
     }
   
     // Remove the friend from the person's friends list
-    const friendIndex = person.friends.indexOf(friendId);
+    const friendIndex = person.amis.indexOf(friendId);
     if (friendIndex !== -1) {
-      person.friends.splice(friendIndex, 1);
+      person.amis.splice(friendIndex, 1);
     }
+
+    await person.save();
   
     return res.json({ message: 'Friend removed successfully' });
   });

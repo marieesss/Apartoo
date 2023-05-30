@@ -13,7 +13,9 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class ProfilComponent {
 
   user:any;
-  role:string
+  role:string;
+  pangolinId: any;
+  information:any;
   frmGroup: FormGroup;
   roles: string[];
 
@@ -22,17 +24,33 @@ export class ProfilComponent {
     this.user = this.localStorage.getItem('currentUser')
     console.log(this.user)
     this.role = this.user.role
+    this.pangolinId = this.user._id
 
     this.frmGroup = this.formBuilder.group({
       role: ['', Validators.required],
     });
     this.roles = this.service.roles;
+
+ 
     
+  }
+
+  ngOnInit(){
+    this.service.getPangolinsInfo(this.pangolinId).subscribe(data =>{
+      this.information = data
+    })
+
   }
 
   logout(){
     this.localStorage.setItem('currentUser', "");
     this.router.navigate(["/inscription"])
+  }
+
+  DeleteFriend(friendId:string){
+    this.service.DeleteFriend(this.pangolinId, friendId).subscribe(res => {
+      window.location.reload()
+    })
   }
 
   // Add pangolin When Submit Button Is Clicked
