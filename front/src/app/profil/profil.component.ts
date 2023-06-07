@@ -17,6 +17,7 @@ export class ProfilComponent {
   pangolinId: any;
   information:any;
   frmGroup: FormGroup;
+  Addform: FormGroup;
   roles: string[];
 
 
@@ -29,6 +30,14 @@ export class ProfilComponent {
     this.frmGroup = this.formBuilder.group({
       role: ['', Validators.required],
     });
+
+    this.Addform = this.formBuilder.group({
+      username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    role: ['', Validators.required],
+    });
+
+
     this.roles = this.service.roles;
 
  
@@ -51,6 +60,27 @@ export class ProfilComponent {
     this.service.DeleteFriend(this.pangolinId, friendId).subscribe(res => {
       window.location.reload()
     })
+  }
+
+  NewUser(){
+    let data = {
+      username: this.Addform.value.username,
+      email: this.Addform.value.email,
+      password: "motdepasse",
+      role: this.Addform.value.role
+}
+
+this.service.Inscription(data).subscribe(data=>{
+  this.Addfriend(data)
+})
+  }
+
+  Addfriend(data:any){
+    const FriendId = data._id
+    this.service.addFriend(this.pangolinId, FriendId).subscribe(res=>{
+      location.reload()
+    })
+    
   }
 
   // Add pangolin When Submit Button Is Clicked
